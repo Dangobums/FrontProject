@@ -1,25 +1,26 @@
 <script setup lang="ts">
 import { reactive, onMounted, ref } from 'vue';
 import { Button } from 'ant-design-vue';
-import { SearchOutlined } from '@ant-design/icons-vue';
+// import { SearchOutlined } from '@ant-design/icons-vue';
 
 import type { IDataSource } from '@/components';
 import { DataTable } from '@/components';
 import { shopService } from '@/services';
 
 const logout = () => {
-  sessionStorage.removeItem('username');
+  sessionStorage.setItem('isLogin', 'false');
   location.reload();
 };
 
 const getUserAvatarColor = () => {
-  const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-  return color;
+  // const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  // return color;
+  return '#069255';
 };
 
 const userAvaColor = ref(getUserAvatarColor());
 
-const userName = ref(sessionStorage.getItem('username') || 'default');
+const userName = 'Admin';
 
 onMounted(() => {
   getList();
@@ -69,8 +70,6 @@ async function getList(page = 1) {
     .getNewRegistationList({ page, per_page: dataSource.paginator.pageSize })
     .finally(() => (dataSource.loading = false));
 
-  console.log('resInCom', shop);
-
   if (success) {
     dataSource.data = shop.data;
     dataSource.paginator = {
@@ -90,19 +89,19 @@ function handleLoadPage(params) {
 
 <template>
   <div class="w-full">
-    <div class="flex w-full bg-indigo-500 items-center px-4 py-2">
+    <div class="flex w-full bg-indigo-500 items-center px-4 py-2 justify-end">
       <div class="mr-4 flex items-center">
         <div
           class="mr-2 w-10 h-10 rounded-full flex items-center justify-center truncate max-w-full"
           :style="{ backgroundColor: userAvaColor }"
         ></div>
-        <div>{{ userName }}</div>
+        <div class="text-white">{{ userName }}</div>
       </div>
       <Button class="cursor-pointer" @click="logout">Logout</Button>
     </div>
     <DataTable :dataSource="dataSource" @table-change="handleLoadPage">
       <template #avatar="{ record }">
-        <div class="2xl:w-[350px] 2xl:h-[230px] xl:w-[200px] xl:h-[120px]">
+        <div class="">
           <img :src="record.avatar" class="w-full h-full object-cover" />
         </div>
       </template>
@@ -110,7 +109,7 @@ function handleLoadPage(params) {
         <div class="shopInfo">
           <div class="headline flex mb-2 items-center">
             <div class="headline__avatar mr-2">
-              <img class="w-12 h-12 rounded-full object-cover" :src="record.creator.avatar" />
+              <img class="w-10 h-10 rounded-full object-cover" :src="record.creator.avatar" />
             </div>
             <div>{{ record.creator.name }}</div>
           </div>

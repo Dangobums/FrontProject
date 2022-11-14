@@ -14,6 +14,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '',
+    alias: '/info',
     name: RouteName.HOMEPAGE,
     component: Homepage,
     meta: { layout: 'defaultNoHeader', requiresAuth: true },
@@ -25,18 +26,18 @@ const routes: RouteRecordRaw[] = [
     component: Login,
     meta: { layout: 'defaultNoHeader' },
   },
-  {
-    path: 'shop-lives',
-    name: RouteName.SHOP_LIVES,
-    component: () => import('@/modules/shopProblem/pages/Lives/index.vue'),
-    meta: { layout: 'defaultNoHeader', requiresAuth: true },
-  },
-  {
-    path: 'shop-new-registation',
-    name: RouteName.NEW_REGISTATION,
-    component: () => import('@/modules/shopProblem/pages/NewRegistation/index.vue'),
-    meta: { layout: 'defaultNoHeader', requiresAuth: true },
-  },
+  // {
+  //   path: 'shop-lives',
+  //   name: RouteName.SHOP_LIVES,
+  //   component: () => import('@/modules/shopProblem/pages/Lives/index.vue'),
+  //   meta: { layout: 'defaultNoHeader', requiresAuth: true },
+  // },
+  // {
+  //   path: 'shop-new-registation',
+  //   name: RouteName.NEW_REGISTATION,
+  //   component: () => import('@/modules/shopProblem/pages/NewRegistation/index.vue'),
+  //   meta: { layout: 'defaultNoHeader', requiresAuth: true },
+  // },
 ];
 
 export default routes;
