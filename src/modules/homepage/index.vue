@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref } from 'vue';
-import { Button } from 'ant-design-vue';
-// import { SearchOutlined } from '@ant-design/icons-vue';
+import { reactive, onMounted, ref, h } from 'vue';
+import { Button, notification } from 'ant-design-vue';
+import { find } from 'lodash';
+import { SearchOutlined } from '@ant-design/icons-vue';
 
 import type { IDataSource } from '@/components';
 import { DataTable } from '@/components';
 import { shopService } from '@/services';
 
 const logout = () => {
-  sessionStorage.setItem('isLogin', 'false');
+  sessionStorage.setItem('isLogin', JSON.stringify({ username: '', isLogin: false }));
   location.reload();
 };
 
@@ -20,7 +21,26 @@ const getUserAvatarColor = () => {
 
 const userAvaColor = ref(getUserAvatarColor());
 
-const userName = 'Admin';
+const listOfUser = JSON.parse(localStorage.getItem('user') || '');
+
+const loginStatus = JSON.parse(sessionStorage.getItem('isLogin') || '');
+
+const userName = loginStatus?.username;
+
+const isAdmin = find(listOfUser, 'isAdmin').username === userName;
+
+const openNotification = () => {
+  const type = isAdmin ? 'success' : 'error';
+  const message = isAdmin ? 'Bạn đã nhấn hoàn thành thành công' : 'Bạn không có quyền để thao tác';
+  notification[type]({
+    message: 'Hoàn thành',
+    description: message,
+    icon: () => h(SearchOutlined, { style: 'color: #0969255 ' }),
+    onClick: () => {
+      // console.log('Notification Clicked!');
+    },
+  });
+};
 
 onMounted(() => {
   getList();
@@ -30,7 +50,7 @@ const dataSource = reactive<IDataSource>({
   loading: false,
   noDataText: 'Không có shop nào',
   tableConfig: {
-    scroll: { y: 700 },
+    scroll: { y: 550 },
   },
   paginator: {
     current: 1,
@@ -93,9 +113,9 @@ function handleLoadPage(params) {
       <div class="mr-4 flex items-center">
         <div
           class="mr-2 w-10 h-10 rounded-full flex items-center justify-center truncate max-w-full"
-          :style="{ backgroundColor: userAvaColor }"
+          :style="{ backgroundColor: isAdmin ? userAvaColor : '#000' }"
         ></div>
-        <div class="text-white">{{ userName }}</div>
+        <div class="text-white font-medium text-lg">{{ userName }}</div>
       </div>
       <Button class="cursor-pointer" @click="logout">Logout</Button>
     </div>
@@ -119,8 +139,10 @@ function handleLoadPage(params) {
             <div class="devices__item bg-gray-300 px-3 py-[2px] rounded-2xl mr-2 mb-1"># Ver1.1.03</div>
           </div>
 
-          <div class="userAction flex flex-wrap">
-            <Button type="primary" ghost size="small" class="userAction__item">Hoàn thành</Button>
+          <div class="userAction flex flex-wrap gap-2">
+            <Button type="primary" ghost size="small" class="userAction__item" @click="openNotification"
+              >Hoàn thành</Button
+            >
             <Button type="primary" ghost size="small" class="userAction__item">Liên hệ lại</Button>
           </div>
         </div>

@@ -41,12 +41,11 @@ const onError = ref(false);
 
 const login = () => {
   const data = JSON.parse(localStorage.getItem('user') || '').map((item) => item.username);
-  console.log(data);
   if (!data.includes(username.value)) {
     onError.value = true;
     return;
   }
-  sessionStorage.setItem('isLogin', 'true');
+  sessionStorage.setItem('isLogin', JSON.stringify({ username: username.value, isLogin: true }));
   router.push({ name: RouteName.HOMEPAGE });
 };
 </script>

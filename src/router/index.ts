@@ -16,7 +16,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-  if (to.meta.requiresAuth && sessionStorage.getItem('isLogin') === 'false') {
+  const loginStaus = JSON.parse(sessionStorage.getItem('isLogin') || '');
+  if (to.meta.requiresAuth && loginStaus.isLogin === false) {
     return { name: RouteName.LOGIN };
   }
 });
