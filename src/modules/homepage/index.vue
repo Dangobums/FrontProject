@@ -35,7 +35,6 @@ const openNotification = () => {
   notification[type]({
     message: 'Hoàn thành',
     description: message,
-    icon: () => h(SearchOutlined, { style: 'color: #0969255 ' }),
     onClick: () => {
       // console.log('Notification Clicked!');
     },
